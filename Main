@@ -1,0 +1,73 @@
+/**
+ * На квадратном торте размером N×N расставлено M свечей. 
+ * Определить, можно ли одним прямолинейным разрезом разделить торт на две части, равные по площади, так, 
+ * чтобы все свечи оказались на одной половине. Свечи считаем точками. Разрез не может проходить через свечу. 
+ * args[0] - N
+ * args[1] step(2) - координата свечи по оси x.
+ * args[2] step(2) - координата свечи по оси y.
+ */
+import kotlin.math.pow
+import kotlin.math.sqrt
+
+fun main(args: Array<String>) {
+
+    fun linearEquation(switch: Int): String {
+        val sizeCake = args[0].toInt()
+        val countCandles = (args.size - 1)/2
+        val lastIndex = args.size - 1
+        val x1 = sizeCake.toDouble()/2
+        val y1 = sizeCake.toDouble()/2
+        val listX: MutableList <Double> =  mutableListOf()
+        val listY: MutableList <Double> =  mutableListOf()
+        for (k in 1..lastIndex step(2)) {
+            if(args[k].toInt() == args[k+1].toInt() && args[k].toDouble() == x1) {
+                return("NO")
+            }
+            listX.add(args[k].toDouble())
+            listY.add(args[k+1].toDouble())
+        }  
+        for (k in 0..sizeCake){
+            val signSet : MutableSet<Char> = mutableSetOf()
+            val x2: Double
+            val y2: Double
+            if (switch == 0) {
+                x2 = k.toDouble()
+                y2 = 0.0
+            } else {
+                y2 = k.toDouble()
+                x2 = 0.0
+            } 
+            for (g in 0..countCandles-1) {
+                val x = listX[g]
+                val y = listY[g]
+                if(x1 != x2) {
+                    val delta = (x - x1)/(x2 - x1) - (y - y1)/(y2 - y1)
+                    if (delta == 0.0){
+                        signSet.add('0')
+                        break   
+                    }
+                    val sign = delta.toString()
+                    if (sign[0] == '-') {
+                        signSet.add('-')
+                    } else {
+                        signSet.add('+')
+                    }
+                }
+            }
+            val ref = setOf('0')
+            if (signSet.size == 1 && signSet != ref) {
+                return("YES")
+            }
+        }
+        return("No")  
+    } 
+    if (linearEquation(0) == "YES") {
+        println(linearEquation(0))
+        return
+    } else if (linearEquation(1) == "YES") {
+        println(linearEquation(1))
+        return
+    } else {
+        println("NO")
+    }
+}
